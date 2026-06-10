@@ -1,0 +1,720 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ultimate Creative Pitch Platform</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    font-family:"Noto Sans TC",sans-serif;
+}
+
+:root{
+    --bg:#0d0d0d;
+    --panel:#181818;
+    --card:#232323;
+    --accent:#ffcc00;
+    --text:#ffffff;
+    --border:#444;
+}
+
+body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+}
+
+header{
+    position:sticky;
+    top:0;
+    z-index:999;
+    background:black;
+    border-bottom:3px solid var(--accent);
+    padding:24px;
+}
+
+header h1{
+    margin:0;
+    font-size:34px;
+}
+
+.container{
+    width:92%;
+    max-width:1400px;
+    margin:auto;
+    padding:30px 0;
+}
+
+.section{
+    background:var(--panel);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:28px;
+    border:1px solid var(--border);
+}
+
+.section h2{
+    color:var(--accent);
+    margin-top:0;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:18px;
+}
+
+.card{
+    background:var(--card);
+    border:2px solid #333;
+    border-radius:14px;
+    padding:18px;
+}
+
+.card:hover{
+    border-color:var(--accent);
+}
+
+input,textarea,select{
+    width:100%;
+    margin:10px 0 18px;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid #555;
+    background:#101010;
+    color:white;
+}
+
+textarea{
+    min-height:120px;
+}
+
+.moodboard{
+    border:2px dashed #666;
+    border-radius:14px;
+    padding:30px;
+    text-align:center;
+    margin-top:20px;
+}
+
+.preview-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:18px;
+    margin-top:20px;
+}
+
+.preview-item{
+    position:relative;
+}
+
+.preview-item img{
+    width:100%;
+    border-radius:12px;
+}
+
+.delete-btn{
+    position:absolute;
+    top:8px;
+    right:8px;
+    width:32px;
+    height:32px;
+    border:none;
+    border-radius:50%;
+    background:red;
+    color:white;
+    font-weight:bold;
+}
+
+.timeline{
+    display:grid;
+    gap:20px;
+}
+
+.timeline-block{
+    background:var(--card);
+    padding:20px;
+    border-radius:14px;
+}
+
+.storyboard{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+}
+
+.story-card{
+    background:var(--card);
+    border:2px dashed #555;
+    border-radius:16px;
+    padding:16px;
+}
+
+.story-paste{
+    border:2px dashed #777;
+    padding:20px;
+    text-align:center;
+    border-radius:12px;
+    cursor:pointer;
+    margin-bottom:12px;
+}
+
+.story-preview img{
+    width:100%;
+    border-radius:10px;
+    margin-bottom:10px;
+}
+
+.checklist{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:12px;
+}
+
+.check-item{
+    background:var(--card);
+    padding:14px;
+    border-radius:12px;
+}
+
+.tools{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    z-index:999;
+}
+
+button{
+    background:var(--accent);
+    color:black;
+    border:none;
+    padding:14px 20px;
+    border-radius:12px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.pitch-mode{
+    position:fixed;
+    inset:0;
+    background:black;
+    z-index:9999;
+    display:none;
+    overflow:hidden;
+}
+
+.pitch-slide{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    opacity:0;
+    transition:1s;
+    padding:40px;
+}
+
+.pitch-slide.active{
+    opacity:1;
+}
+
+.pitch-slide img{
+    max-width:70%;
+    max-height:60vh;
+    border-radius:20px;
+    box-shadow:0 0 40px rgba(255,204,0,0.5);
+    animation:zoomFloat 5s infinite alternate;
+}
+
+.pitch-title{
+    font-size:72px;
+    color:var(--accent);
+    font-weight:900;
+    animation:glitch 1.5s infinite;
+}
+
+.pitch-text{
+    font-size:28px;
+    max-width:900px;
+}
+
+.pitch-close{
+    position:absolute;
+    top:20px;
+    right:20px;
+}
+
+@keyframes zoomFloat{
+    from{transform:scale(1)}
+    to{transform:scale(1.05)}
+}
+
+@keyframes glitch{
+    0%{transform:translate(0)}
+    25%{transform:translate(-2px,2px)}
+    50%{transform:translate(2px,-2px)}
+    75%{transform:translate(-1px,1px)}
+    100%{transform:translate(0)}
+}
+
+@media print{
+    .tools{
+        display:none;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>Ultimate Creative Pitch Platform</h1>
+</header>
+
+<div class="container">
+
+<div class="section">
+
+<h2>1. 廣告靈感流派</h2>
+
+<div class="grid">
+
+<div class="card">
+<h3>熱血實戰流</h3>
+<p>真槍實彈的產學實戰。</p>
+</div>
+
+<div class="card">
+<h3>畢業設計流</h3>
+<p>成果展現與職涯接軌。</p>
+</div>
+
+<div class="card">
+<h3>科技好玩流</h3>
+<p>數位互動與創新科技。</p>
+</div>
+
+<div class="card">
+<h3>硬核設備流</h3>
+<p>頂尖設備與實驗室震撼感。</p>
+</div>
+
+</div>
+
+<label>選擇流派</label>
+<input type="text" id="genre">
+
+<label>TA</label>
+<textarea id="ta"></textarea>
+
+<label>USP</label>
+<textarea id="usp"></textarea>
+
+</div>
+
+<div class="section">
+
+<h2>2. 視覺風格與 Slogan</h2>
+
+<label>Slogan</label>
+<input type="text" id="slogan">
+
+<label>視覺描述</label>
+<textarea id="visual"></textarea>
+
+<div class="moodboard">
+<h3>Ctrl + V 貼上 Moodboard 圖片</h3>
+</div>
+
+<div id="moodboardPreview" class="preview-grid"></div>
+
+</div>
+
+<div class="section">
+
+<h2>3. 影音腳本</h2>
+
+<div class="timeline">
+
+<div class="timeline-block">
+
+<h3>0 - 10 秒</h3>
+
+<label>畫面描述</label>
+<textarea></textarea>
+
+<label>VO / 台詞</label>
+<textarea></textarea>
+
+<label>SFX / 配樂</label>
+<textarea></textarea>
+
+</div>
+
+<div class="timeline-block">
+
+<h3>10 - 20 秒</h3>
+
+<label>畫面描述</label>
+<textarea></textarea>
+
+<label>VO / 台詞</label>
+<textarea></textarea>
+
+<label>SFX / 配樂</label>
+<textarea></textarea>
+
+</div>
+
+<div class="timeline-block">
+
+<h3>20 - 30 秒</h3>
+
+<label>畫面描述</label>
+<textarea></textarea>
+
+<label>VO / 台詞</label>
+<textarea></textarea>
+
+<label>SFX / 配樂</label>
+<textarea></textarea>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>4. Storyboard 分鏡區</h2>
+
+<div class="storyboard" id="storyboard"></div>
+
+</div>
+
+<div class="section">
+
+<h2>5. 素材 Checklist</h2>
+
+<div class="checklist">
+
+<div class="check-item">
+<input type="checkbox"> 主任大頭照
+</div>
+
+<div class="check-item">
+<input type="checkbox"> 系徽素材
+</div>
+
+<div class="check-item">
+<input type="checkbox"> 舊報紙背景
+</div>
+
+<div class="check-item">
+<input type="checkbox"> 火箭素材
+</div>
+
+<div class="check-item">
+<input type="checkbox"> AI 生成圖
+</div>
+
+<div class="check-item">
+<input type="checkbox"> 拼貼素材
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="tools">
+
+<button onclick="window.print()">
+匯出 PDF
+</button>
+
+<button onclick="saveProject()">
+儲存
+</button>
+
+<button onclick="startPitch()">
+開始 Pitch
+</button>
+
+</div>
+
+<div class="pitch-mode" id="pitchMode">
+
+<button class="pitch-close" onclick="closePitch()">
+關閉 Pitch
+</button>
+
+<div id="pitchSlides"></div>
+
+</div>
+
+<script>
+
+/* 建立分鏡 */
+
+const storyboard =
+document.getElementById("storyboard");
+
+for(let i=1;i<=8;i++){
+
+storyboard.innerHTML += `
+
+<div class="story-card">
+
+<h3>SHOT ${i}</h3>
+
+<div class="story-paste">
+點擊後 Ctrl + V 貼圖
+</div>
+
+<div class="story-preview"></div>
+
+<label>運鏡</label>
+
+<select>
+<option>推進 Zoom In</option>
+<option>旋轉 Rotate</option>
+<option>跟拍 Tracking</option>
+<option>晃動 Shake</option>
+<option>特寫 Close-Up</option>
+</select>
+
+<label>秒數</label>
+
+<input type="text">
+
+<label>畫面描述</label>
+
+<textarea></textarea>
+
+</div>
+
+`;
+
+}
+
+/* 分鏡貼圖 */
+
+let currentArea = null;
+
+document.addEventListener("click", function(e){
+
+if(e.target.classList.contains("story-paste")){
+
+document.querySelectorAll(".story-paste")
+.forEach(el=>el.style.borderColor="#777");
+
+e.target.style.borderColor="#ffcc00";
+
+currentArea = e.target;
+
+}
+
+});
+
+document.addEventListener("paste", function(event){
+
+const items = event.clipboardData.items;
+
+for(let item of items){
+
+if(item.type.indexOf("image") !== -1){
+
+const file = item.getAsFile();
+const reader = new FileReader();
+
+reader.onload = function(e){
+
+if(currentArea){
+
+const preview =
+currentArea.nextElementSibling;
+
+preview.innerHTML =
+`<img src="${e.target.result}">`;
+
+currentArea = null;
+
+}else{
+
+const wrapper =
+document.createElement("div");
+
+wrapper.className = "preview-item";
+
+wrapper.innerHTML =
+`<img src="${e.target.result}">
+<button class="delete-btn">X</button>`;
+
+wrapper.querySelector("button")
+.onclick = ()=>wrapper.remove();
+
+document
+.getElementById("moodboardPreview")
+.appendChild(wrapper);
+
+}
+
+};
+
+reader.readAsDataURL(file);
+
+}
+
+}
+
+});
+
+/* Pitch */
+
+let currentSlide = 0;
+let interval = null;
+
+function startPitch(){
+
+const slidesContainer =
+document.getElementById("pitchSlides");
+
+slidesContainer.innerHTML = "";
+
+const slogan =
+document.getElementById("slogan").value || "Creative Power";
+
+const usp =
+document.getElementById("usp").value || "Your Future Starts Here";
+
+slidesContainer.innerHTML += `
+<div class="pitch-slide active">
+<div class="pitch-title">${slogan}</div>
+<div class="pitch-text">${usp}</div>
+</div>
+`;
+
+document.querySelectorAll(".story-card")
+.forEach((card,index)=>{
+
+const img =
+card.querySelector(".story-preview img");
+
+const text =
+card.querySelector("textarea").value;
+
+const move =
+card.querySelector("select").value;
+
+slidesContainer.innerHTML += `
+<div class="pitch-slide">
+${img ? `<img src="${img.src}">` : ""}
+<div class="pitch-title">
+SHOT ${index+1}
+</div>
+<div class="pitch-text">
+${move}<br><br>${text}
+</div>
+</div>
+`;
+
+});
+
+document.getElementById("pitchMode")
+.style.display = "block";
+
+const slides =
+document.querySelectorAll(".pitch-slide");
+
+currentSlide = 0;
+
+interval = setInterval(()=>{
+
+slides.forEach(slide=>
+slide.classList.remove("active")
+);
+
+currentSlide++;
+
+if(currentSlide >= slides.length){
+currentSlide = 0;
+}
+
+slides[currentSlide]
+.classList.add("active");
+
+},3000);
+
+}
+
+function closePitch(){
+
+document.getElementById("pitchMode")
+.style.display = "none";
+
+clearInterval(interval);
+
+}
+
+/* 儲存 */
+
+function saveProject(){
+
+const inputs =
+document.querySelectorAll("input, textarea, select");
+
+const data = [];
+
+inputs.forEach(el=>{
+data.push(el.value);
+});
+
+localStorage.setItem(
+"ultimatePitchData",
+JSON.stringify(data)
+);
+
+alert("已儲存！");
+}
+
+function loadProject(){
+
+const saved =
+JSON.parse(
+localStorage.getItem("ultimatePitchData")
+);
+
+if(!saved) return;
+
+const inputs =
+document.querySelectorAll("input, textarea, select");
+
+inputs.forEach((el,index)=>{
+
+if(saved[index]){
+el.value = saved[index];
+}
+
+});
+
+}
+
+loadProject();
+
+</script>
+
+</body>
+</html>
