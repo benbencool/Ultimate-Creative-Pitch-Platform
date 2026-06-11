@@ -251,6 +251,7 @@ button{
     position:absolute;
     top:20px;
     right:20px;
+    z-index:10000;
 }
 
 @keyframes zoomFloat{
@@ -713,6 +714,16 @@ el.value = saved[index];
 }
 
 loadProject();
+
+
+document.addEventListener("keydown", function(e){
+
+if(e.key === "Escape"){
+closePitch();
+}
+
+});
+
 
 </script>
 
